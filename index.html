@@ -5,36 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invitación de Gala - Ingeniería Biomédica UCSM</title>
 
-    <!-- OPTIMIZACIÓN DE FUENTES (Mantenemos carga rápida) -->
+    <!-- OPTIMIZACIÓN DE FUENTES (Carga rápida y elegante) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- META TAGS OPEN GRAPH (Mantenemos para WhatsApp) -->
+    <!-- META TAGS OPEN GRAPH (Para WhatsApp profesional) -->
     <meta property="og:title" content="Invitación de Gala - Imposición de Mandiles">
     <meta property="og:description" content="Ceremonia Oficial - Escuela Profesional de Ingeniería Biomédica (UCSM)">
-    <meta property="og:image" content="logo ucsm.png">
+    <meta property="og:image" content="logo ing biomedica1.png"> <!-- Vista previa WhatsApp -->
     <meta property="og:type" content="website">
 
     <style>
         /* =========================================
            ESTILOS BASE CON FONDO TEMÁTICO
            ========================================= */
-        body {
-            font-family: 'Montserrat', sans-serif;
+        body, html {
             margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
+            padding: 0;
+            height: 100%;
+            overflow: hidden; /* Evita scroll mientras está la pantalla de bienvenida */
+            font-family: 'Montserrat', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            perspective: 1500px; /* Para efecto 3D sutil */
-            
-            /* NUEVO: Fondo con Gradiente Radial Profundo y Textura Tenue */
             background: 
                 radial-gradient(circle, #2c3e50 0%, #1a252f 100%),
                 repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 10px);
+
+            /* MEJORA: OCULTAR BARRA DESLIZANTE MANTENIENDO SCROLL */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge antiguo */
+        }
+
+        /* Ocultar barra en Chrome/Safari/Edge moderno */
+        body::-webkit-scrollbar,
+        html::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* =========================================
+           PANTALLA DE BIENVENIDA (overlay)
+           ========================================= */
+        #overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #1a252f;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 2000;
+            color: #fdfaf0;
+            transition: opacity 1s ease, visibility 1s;
+        }
+
+        #overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .welcome-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5em;
+            color: #b8860b;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .open-btn {
+            font-family: 'Montserrat', sans-serif;
+            border: 2px solid #daa520;
+            padding: 15px 35px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.95em;
+            cursor: pointer;
+            background: linear-gradient(to right, #1a252f, #2c3e50, #1a252f);
+            color: white;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 15px rgba(218, 165, 32, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .open-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(218, 165, 32, 0.5);
+            background: #daa520;
+            color: #1a252f;
+        }
+
+        /* =========================================
+           ESTILOS TARJETA (Oculta inicialmente)
+           ========================================= */
+        #main-content {
+            display: none; /* Oculto inicialmente */
+            perspective: 1500px;
+            padding: 20px;
+            box-sizing: border-box;
+            width: 100%;
+            justify-content: center;
+            align-items: flex-start; /* CRUCIAL: Inicia desde arriba tras el clic */
         }
 
         .card-container {
@@ -42,27 +112,32 @@
             padding: 40px;
             max-width: 750px; 
             width: 100%;
-            text-align: left; 
+            text-align: center; 
             position: relative;
             box-sizing: border-box;
+            margin: auto;
+            margin-top: 50px; /* Espacio superior para desktop */
+            margin-bottom: 50px;
 
-            /* NUEVO: Borde Dorado Metálico Cepillado Dramático */
-            border: 18px solid transparent; /* Más grueso */
+            /* Borde Dorado Metálico Cepillado */
+            border: 18px solid transparent; 
             border-image: linear-gradient(135deg, #d4af37 0%, #daa520 50%, #f7e7ce 100%) 1;
 
-            /* EFECTOS PREMIUM Y ANIMACIÓN DE ENTRADA (Mantenida) */
+            /* EFECTOS PREMIUM Y ANIMACIÓN DE ENTRADA */
             box-shadow: 0 15px 40px rgba(0,0,0,0.6);
             transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease;
-            animation: entradaGala 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            
+            /* Animación se activa por JS al abrir */
             opacity: 0;
+            transform: translateY(60px) rotateX(-5deg);
         }
 
-        /* Animación suave de aparición al cargar la página */
+        /* Clase activada por JS al abrir */
+        .card-animate {
+            animation: entradaGala 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
         @keyframes entradaGala {
-            from {
-                opacity: 0;
-                transform: translateY(60px) rotateX(-5deg);
-            }
             to {
                 opacity: 1;
                 transform: translateY(0) rotateX(0deg);
@@ -75,7 +150,7 @@
             box-shadow: 0 25px 50px rgba(0,0,0,0.7);
         }
 
-        /* Acentos dorados filigrana en esquinas (Mantenidos) */
+        /* Acentos dorados filigrana en esquinas */
         .card-container::before,
         .card-container::after {
             content: '';
@@ -86,59 +161,83 @@
             pointer-events: none;
         }
 
-        .card-container::before {
-            top: 10px;
-            left: 10px;
-            border-top-color: #daa520;
-            border-left-color: #daa520;
+        .card-container::before { top: 10px; left: 10px; border-top-color: #daa520; border-left-color: #daa520; }
+        .card-container::after { bottom: 10px; right: 10px; border-bottom-color: #daa520; border-right-color: #daa520; }
+
+        /* =========================================
+           NUEVO: ESTILOS DE LOGOS PROFESIONALES AGRANDADOS
+           Header Superior Dual (Cresta Central apilada en mobile)
+           ========================================= */
+        .gala-header { 
+            margin-bottom: 20px; 
+            display: flex; 
+            justify-content: space-between; /* Uno a cada extremo en desktop */
+            align-items: center; 
+            padding: 0 10px; 
+            box-sizing: border-box; 
         }
 
-        .card-container::after {
-            bottom: 10px;
-            right: 10px;
-            border-bottom-color: #daa520;
-            border-right-color: #daa520;
-        }
-
-        /* CABECERA TOP */
-        .header {
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between; 
-            align-items: center;
-            padding: 0 10px;
-            box-sizing: border-box;
-        }
-
-        .university-logo {
-            width: 105px; 
-            height: 105px;
-            display: block;
-            border-radius: 50%;
+        .university-logo { 
+            /* === TAMAÑO AGRANDADO EN DESKTOP === */
+            width: 140px; /* Antes 105px */
+            height: 140px; 
+            display: block; 
+            border-radius: 50%; 
             flex-shrink: 0; 
-            /* NUEVO: Animación sutil de escala y rotación */
-            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            
+            /* EFECTO PROFESIONAL 1: Sombra de profundidad */
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+            
+            /* Transición suave para todos los efectos */
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            
+            /* Preparar para el efecto de brillo metálico */
+            position: relative;
+            overflow: hidden;
         }
         
-        .university-logo:hover {
-            transform: scale(1.1) rotate(5deg);
+        /* EFECTO PROFESIONAL 2: Resplandor dorado y elevación en Hover */
+        .university-logo:hover { 
+            transform: scale(1.08) translateY(-5px);
+            filter: drop-shadow(0 10px 15px rgba(218, 165, 32, 0.5));
         }
 
-        .logo-left {
-            background-image: url('logo nuevo.png');
-            background-size: contain; 
-            background-repeat: no-repeat;
-            background-position: center;
+        /* EFECTO PROFESIONAL 3: Brillo Metálico (Flash Sheen) */
+        .university-logo::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -110%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            
+            /* Animación que se dispara con JS al abrir */
+            opacity: 0;
         }
 
-        .logo-right {
-            background-image: url('logo ing biomedica1.png');
-            background-size: contain; 
-            background-repeat: no-repeat;
-            background-position: center;
+        /* Clase activada por JS para el destello inicial */
+        .logo-flash::after {
+            animation: flashSheen 1.2s ease-out 1.2s forwards; /* Empieza 1.2s después de abrir */
         }
 
-        /* CONTENEDOR CENTRAL DE TÍTULOS */
+        @keyframes flashSheen {
+            0% { left: -110%; opacity: 0; }
+            20% { opacity: 1; }
+            100% { left: 110%; opacity: 0; }
+        }
+
+        /* Carga de imágenes locales */
+        .logo-ucsm { background-image: url('logo nuevo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; }
+        .logo-biomedica { background-image: url('logo ing biomedica1.png'); background-size: contain; background-repeat: no-repeat; background-position: center; }
+        
+        /* CONTENEDOR CENTRAL DE TÍTULOS (Centrados abajo de logos) */
         .titles-container {
             text-align: center;
             margin-bottom: 35px;
@@ -148,7 +247,6 @@
 
         .university-principal-title {
             font-size: 1.1em;
-            /* NUEVO: Color más oscuro para mejor contraste */
             color: #95a5a6; 
             font-weight: 500;
             text-transform: uppercase;
@@ -181,7 +279,7 @@
             font-size: 2.7em;
             margin: 0 0 8px 0;
             font-weight: 700;
-            /* NUEVO: Oro Intenso Metálico */
+            /* Oro Intenso Metálico */
             color: #b8860b; 
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
@@ -201,11 +299,12 @@
             color: #333;
             line-height: 1.7;
             margin-bottom: 35px;
-            text-align: center;
+            text-align: justify; /* NUEVO: Más profesional, alineado */
+            hyphens: auto; /* Fallback para móviles */
             font-weight: 400;
         }
 
-        /* CONTENEDOR DE DETALLES GRID */
+        /* CONTENEDOR DE DETALLES GRID (Día/Hora/Lugar) */
         .event-details {
             display: grid;
             grid-template-columns: repeat(3, 1fr); 
@@ -248,7 +347,6 @@
             text-align: center;
             border: 1px solid rgba(44, 62, 80, 0.1);
             padding: 30px;
-            /* NUEVO: Fondo translúcido más claro para elegancia */
             background-color: rgba(255, 255, 255, 0.6); 
             border-radius: 8px;
             box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
@@ -271,7 +369,7 @@
             line-height: 1.5;
         }
 
-        /* NUEVO: BOTÓN CON GRADIENTE METÁLICO PREMIUM */
+        /* BOTÓN CON GRADIENTE METÁLICO PREMIUM */
         .cta-button {
             border: 2px solid #daa520;
             padding: 15px 35px;
@@ -303,6 +401,7 @@
             transform: scale(0.97); /* Click físico */
         }
 
+        /* Sección de Iconos Científico-Médicos */
         .icon-row {
             display: flex;
             justify-content: center;
@@ -312,6 +411,7 @@
             color: #daa520;
         }
 
+        /* Pie de página */
         .footer {
             margin-top: 35px;
             font-size: 0.85em;
@@ -321,138 +421,175 @@
         }
 
         /* =========================================
-           MEDIA QUERIES - AJUSTE AUTOMÁTICO
+           ADAPTACIÓN AUTOMÁTICA (MEDIA QUERIES)
            ========================================= */
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
-                align-items: flex-start; 
-                background: linear-gradient(circle, #2c3e50 0%, #1a252f 100%); /* Simplifica fondo */
+            body, html { 
+                height: auto; /* CRUCIAL: Permite que el body crezca y haya scroll */
+                min-height: 100vh; 
+                overflow-x: hidden; /* Evita scroll horizontal */
+                overflow-y: auto; /* Asegura scroll vertical tras el clic */
+                scrollbar-width: none;
+                -ms-overflow-style: none;
             }
 
-            .card-container {
+            #main-content { 
+                padding: 10px; 
+                padding-top: 0; 
+                justify-content: flex-start; /* Evita centrar verticalmente, inicia arriba */
+            }
+
+            .card-container { 
                 padding: 25px 15px; 
-                width: 100%;
-                border-width: 12px; /* Un poco más delgado en móvil */
-            }
-
-            .university-logo {
-                width: 75px; 
-                height: 75px;
-            }
-
-            .university-principal-title {
-                font-size: 0.9em;
-                letter-spacing: 2px;
-            }
-
-            .school-principal-title {
-                font-size: 1.15em;
-                letter-spacing: 1px;
-                margin-bottom: 15px;
-            }
-
-            .main-title {
-                font-size: 1.9em; 
-            }
-
-            .sub-title {
-                font-size: 1.25em;
-            }
-
-            .event-details {
-                grid-template-columns: 1fr; 
-                gap: 15px;
-                padding: 15px 0;
-            }
-
-            .detail-item {
-                border-left: none; 
-                border-top: 1px solid rgba(44, 62, 80, 0.1); 
-                padding-top: 12px;
-                padding-left: 0;
-                text-align: center; 
-            }
-
-            .detail-item:first-child {
-                border-top: none; 
-            }
-
-            .registration-section {
-                padding: 20px;
-            }
-
-            .cta-button {
                 width: 100%; 
-                padding: 15px;
-                box-sizing: border-box;
+                border-width: 12px; 
+                margin-top: 20px; /* Separación arriba */
+                margin-bottom: 20px; 
+                text-align: center; /* Todo centrado en móvil */
             }
+
+            /* Ajuste de header unificado en móvil: Apilado y centrado */
+            .gala-header { 
+                flex-direction: column; 
+                gap: 15px; 
+                margin-bottom: 30px; 
+                justify-content: center; /* Centrado horizontal */
+            }
+            
+            /* === TAMAÑO AGRANDADO EN MÓVIL === */
+            .university-logo { 
+                width: 120px; /* Antes 90px */
+                height: 120px; 
+            }
+            
+            .university-principal-title { font-size: 0.9em; letter-spacing: 2px; }
+            .school-principal-title { font-size: 1.15em; letter-spacing: 1px; margin-bottom: 15px; }
+            .main-title { font-size: 1.9em; }
+            .sub-title { font-size: 1.25em; }
+            
+            .invitation-text { text-align: center; hyphens: none; } /* Centrado en móvil, no justificado */
+
+            .event-details { grid-template-columns: 1fr; gap: 15px; padding: 15px 0; }
+            .detail-item { border-left: none; border-top: 1px solid rgba(44, 62, 80, 0.1); padding-top: 12px; padding-left: 0; text-align: center; }
+            .detail-item:first-child { border-top: none; }
+            
+            .registration-section { padding: 20px; }
+            .cta-button { width: 100%; padding: 15px; box-sizing: border-box; }
+            .welcome-title { font-size: 1.8em; }
         }
     </style>
 </head>
 <body>
-    <main class="card-container">
-        
-        <!-- CABECERA ORDENADA -->
-        <header class="header">
-            <div class="university-logo logo-left"></div> 
-            <div class="university-logo logo-right"></div> 
-        </header>
 
-        <!-- SECCIÓN DE MARCA CENTRAL -->
-        <div class="titles-container">
-            <span class="university-principal-title">Universidad Católica de Santa María</span>
-            <h2 class="school-principal-title">Escuela Profesional de Ingeniería Biomédica</h2>
-            <div class="divider-diamond">&#9670; &thinsp; &#9670; &thinsp; &#9670;</div>
-            <h1 class="main-title">Invitación de Honor</h1>
-            <h2 class="sub-title">Ceremonia de Imposición de Mandiles</h2>
-        </div>
+    <!-- ELEMENTO DE AUDIO (Mantenido) -->
+    <audio id="bgMusic" src="ucsm.mp3" loop prelaod="auto"></audio>
 
-        <p class="invitation-text">
-            La Escuela Profesional de Ingeniería Biomédica tiene el agrado de invitar a usted, a su distinguido(a) hijo(a) y a su familia a esta significativa ceremonia.
-        </p>
+    <!-- PANTALLA DE BIENVENIDA (overlay) -->
+    <div id="overlay">
+        <h1 class="welcome-title">Bienvenido a la Gala</h1>
+        <p style="color: #95a5a6; margin-bottom: 30px;">Ingeniería Biomédica UCSM</p>
+        <button class="open-btn" onclick="openInvitation()">Abrir Invitación</button>
+    </div>
 
-        <!-- DETALLES INFORMATIVOS -->
-        <section class="event-details">
-            <div class="detail-item">
-                <span class="detail-label">Fecha:</span>
-                <span class="detail-value">Viernes, 19 de Junio de 2026</span>
-            </div>
-            <div class="detail-item">
-                <span class="detail-label">Hora:</span>
-                <span class="detail-value">9:30 A.M.</span>
-            </div>
-            <div class="detail-item">
-                <span class="detail-label">Lugar:</span>
-                <span class="detail-value">Auditorio Miguel Grau,<br>Campus Central UCSM</span>
-            </div>
-        </section>
-
-        <!-- SECCIÓN DE ENLACE A GOOGLE FORMS -->
-        <section class="registration-section">
-            <h3 class="registration-title">Sección de Registro Online</h3>
-            <p class="registration-instruction">
-                Para confirmar su asistencia y registrar los datos de sus invitados, por favor haga clic en el botón a continuación para completar el formulario oficial de la escuela.
-            </p>
+    <!-- CONTENIDO PRINCIPAL -->
+    <div id="main-content">
+        <main id="card" class="card-container">
             
-            <!-- REEMPLAZA EL LINK POR EL DE TU GOOGLE FORM -->
-            <a href="https://forms.gle/zofsfjQSFz1aW4ad6" target="_blank" class="cta-button">
-                Haga Clic Aquí para Registrar Datos
-            </a>
-        </section>
+            <!-- HEADER SUPERIOR DUAL (Logos profesionales AGRANDADOS por CSS) -->
+            <header class="gala-header">
+                <!-- Logo UCSM a la izquierda -->
+                <div id="logoUCSM" class="university-logo logo-ucsm"></div> 
+                <!-- Logo Biomédica solicitado a la derecha -->
+                <div id="logoBiomedica" class="university-logo logo-biomedica"></div> 
+            </header>
 
-        <!-- Iconos Científico-Médicos -->
-        <div class="icon-row">
-            &#9877; <!-- Estetoscopio -->
-            &#128147; <!-- Pulso Cardíaco -->
-            &#9995; <!-- Imposición -->
-            &#129516; <!-- Cadena de ADN -->
-        </div>
+            <!-- SECCIÓN DE MARCA CENTRAL (Títulos centrados abajo) -->
+            <div class="titles-container">
+                <span class="university-principal-title">Universidad Católica de Santa María</span>
+                <h2 class="school-principal-title">Escuela Profesional de Ingeniería Biomédica</h2>
+                <div class="divider-diamond">&#9670; &thinsp; &#9670; &thinsp; &#9670;</div>
+                <h1 class="main-title">Invitación de Honor</h1>
+                <h2 class="sub-title">Ceremonia de Imposición de Mandiles</h2>
+            </div>
 
-        <!-- Pie de página -->
-        <footer class="footer">
-            <p>Se agradece confirmar su distinguida asistencia antes del 15 de junio.</p>
-        </footer>
-    </main>
+            <p class="invitation-text">
+                La Escuela Profesional de Ingeniería Biomédica tiene el agrado de invitar a usted, a su distinguido(a) hijo(a) y a su familia a esta significativa ceremonia.
+            </p>
+
+            <section class="event-details">
+                <div class="detail-item">
+                    <span class="detail-label">Fecha:</span>
+                    <span class="detail-value">Viernes, 19 de Junio de 2026</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Hora:</span>
+                    <span class="detail-value">9:30 A.M.</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Lugar:</span>
+                    <span class="detail-value">Auditorio Miguel Grau,<br>Campus Central UCSM</span>
+                </div>
+            </section>
+
+            <section class="registration-section">
+                <h3 class="registration-title">Sección de Registro Online</h3>
+                <p class="registration-instruction">
+                    Para confirmar su asistencia y registrar los datos de sus invitados, por favor haga clic en el botón a continuación para completar el formulario oficial de la escuela.
+                </p>
+                
+                <a href="https://forms.gle/zofsfjQSFz1aW4ad6" target="_blank" class="cta-button">
+                    Haga Clic Aquí para Registrar Datos
+                </a>
+            </section>
+
+            <div class="icon-row">
+                &#9877; <!-- Estetoscopio -->
+                &#128147; <!-- Pulso Cardíaco -->
+                &#9995; <!-- Imposición -->
+                &#129516; <!-- Cadena de ADN -->
+            </div>
+
+            <footer class="footer">
+                <p>Se agradece confirmar su distinguida asistencia antes del 15 de junio.</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- LÓGICA JAVASCRIPT CORREGIDA PARA ACTIVAR SCROLL -->
+    <script>
+        function openInvitation() {
+            // 1. Reproducir Audio AUTOMÁTICAMENTE al hacer clic
+            const music = document.getElementById('bgMusic');
+            music.play().catch(error => {
+                console.log("La reproducción de audio fue bloqueada automáticamente por el navegador:", error);
+            });
+
+            // 2. Ocultar overlay
+            const overlay = document.getElementById('overlay');
+            overlay.classList.add('hidden');
+
+            // 3. Mostrar contenido de la tarjeta
+            const mainContent = document.getElementById('main-content');
+            mainContent.style.display = 'flex'; 
+            
+            // Un pequeño delay para coordinar la animación
+            setTimeout(() => {
+                // 4. Activar animación de la tarjeta
+                const card = document.getElementById('card');
+                card.classList.add('card-animate');
+                
+                // 5. Activar el destello profesional en AMBOS logos superiores
+                document.getElementById('logoUCSM').classList.add('logo-flash');
+                document.getElementById('logoBiomedica').classList.add('logo-flash');
+                
+                // 6. Permitir scroll en el body tras abrir
+                document.body.style.overflow = 'auto';
+                document.documentElement.style.overflow = 'auto';
+
+                // CORRECCIÓN PREVIA (mantener behavior smooth): Forzar que la tarjeta se deslice automáticamente al inicio (los logos)
+                card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+    </script>
 </body>
 </html>
